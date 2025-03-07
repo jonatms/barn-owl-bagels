@@ -1,0 +1,34 @@
+<html>
+  <head>
+  </head>
+<style>
+    img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+</style>
+<img src="{{url_for('static', filename='owlheader2.png')}}" />
+  <body>
+    <h1>Irresistible Doughy Oven-baked Rings</h1>
+    <h2>Your Order</h2>
+    <script>
+        fetch('/orderdetails/215')
+        .then(response => response.text())
+        .then(data => {
+            const orderDetails = document.createElement('div');
+            const parsedData = JSON.parse(data);
+            orderDetails.innerHTML = `
+            <p>Item: ${parsedData.item}</p>
+            <p>Quantity: ${parsedData.quantity}</p>
+            <p>Price: $${parsedData.price}</p>
+            <p>Special Instructions: ${parsedData.special_instructions}</p>
+            `;
+            document.body.appendChild(orderDetails);
+        })
+        .catch(error => console.error('Error fetching order details:', error));
+    </script>
+    <!-- One person didn't order bagels at all... -->
+  </body>
+
+</html>
