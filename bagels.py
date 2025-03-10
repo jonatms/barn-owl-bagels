@@ -4,6 +4,7 @@ import base64
 import os
   
 app = Flask(__name__)
+# This is the key for the session token, so that the session values can't be changed without this key
 app.config['SECRET_KEY'] = 'Lx1jEPHy2wXtmdUko2KywbiIMCKfttu8'
 
 bind_port = 8000
@@ -44,14 +45,10 @@ def path():
 def imageContent():  
     file_input = request.args.get('file')
     # remove path traversal payloads from path, twice
-    if '../' in file_input:
-        file_input = file_input.replace('../', '')
-    if '../' in file_input:
-        file_input = file_input.replace('../', '')
-    if '..\\' in file_input:
-        file_input = file_input.replace('..\\', '')
-    if '..\\' in file_input:
-        file_input = file_input.replace('..\\', '')
+    path_traversal_payloads = ['../','..\\']
+    for i in range(2):
+        for p in path_traversal_payloads:
+            file_input = file_input.replace(p, '')
 
     path = 'static/content/images/' + file_input
     print(path)
@@ -78,6 +75,10 @@ def imageContent():
         except Exception as e:
             return str(e), 500
     return "No file specified", 400
+
+@app.route('/specialadminendpoint', methods=['GET'])  
+def special():  
+    return "bagels_and_websites_are_full_of_holes"
 
 @app.route('/orderdetails/<int:order_id>', methods=['GET'])  
 def order(order_id):  
