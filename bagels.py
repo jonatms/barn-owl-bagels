@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, make_response, session
 import uuid
 import base64
+import os
   
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Lx1jEPHy2wXtmdUko2KywbiIMCKfttu8'
@@ -13,6 +14,7 @@ def before_request():
         response = make_response() 
         session['username'] = "user"
         session['idor'] = "Incomplete"
+        session['path'] = "Incomplete"
         if 'user_id' not in request.cookies:
             user_id = str(uuid.uuid4())
             response.set_cookie('user_id', user_id)
@@ -25,11 +27,57 @@ def before_request():
         if 'vSecureCookie' not in request.cookies:
             sc = base64.b64encode("cookieFlagBypass=False".encode("ascii")).decode("ascii")
             response.set_cookie('vSecureCookie', sc)
+        if 'ySoXT7' not in request.cookies:
+            y = str(uuid.uuid4())
+            response.set_cookie('ySoXT7', y)
         return response
 
 @app.route('/idor', methods=['GET'])  
 def idor():  
     return render_template('idor.html')
+
+@app.route('/path', methods=['GET'])  
+def path():  
+    return render_template('path.html')
+
+@app.route('/imageContent', methods=['GET'])  
+def imageContent():  
+    file_input = request.args.get('file')
+    # remove path traversal payloads from path, twice
+    if '../' in file_input:
+        file_input = file_input.replace('../', '')
+    if '../' in file_input:
+        file_input = file_input.replace('../', '')
+    if '..\\' in file_input:
+        file_input = file_input.replace('..\\', '')
+    if '..\\' in file_input:
+        file_input = file_input.replace('..\\', '')
+
+    path = 'static/content/images/' + file_input
+    print(path)
+    path = os.path.commonpath([os.path.abspath(path)])
+    print(path)
+    if 'Barn Owl Bagels\\static' not in path:
+        return "Invalid path", 400
+    if os.path.isdir(path):
+        try:
+            files = os.listdir(path)
+            print(files)
+            return render_template('directory.html', files=files, directory=path)
+        except Exception as e:
+            return str(e), 500
+    elif path:
+        try:
+            with open(path, 'rb') as file:
+                content = file.read()
+            response = make_response(content)
+            response.headers['Content-Type'] = 'image/jpeg'
+            return response
+        except FileNotFoundError:
+            return "File not found", 404
+        except Exception as e:
+            return str(e), 500
+    return "No file specified", 400
 
 @app.route('/orderdetails/<int:order_id>', methods=['GET'])  
 def order(order_id):  
@@ -75,6 +123,9 @@ def submit_flag():
     flag = request.form.get('flag')
     if flag == "1NS3CUr3_D1r3CT_BAG3L_r3F3r3C3":
         session['idor'] = "Complete"
+        return "Flag is correct!"
+    elif flag == 'the_path_less_traveled_leads_to_bagels':
+        session['path'] = "Complete"
         return "Flag is correct!"
     else:
         return "Flag is incorrect."

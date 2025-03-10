@@ -8,7 +8,7 @@
         object-fit: cover;
     }
 </style>
-<img src="{{url_for('static', filename='owlheader2.png')}}" />
+<img src="{{url_for('static', filename='content/images/owlheader2.png')}}" />
   <body>
     <h1>Flags</h1>
     <form action="/submitflag" method="post">
@@ -17,6 +17,7 @@
       <input type="submit" value="Submit">
     </form>
     <p style="color: {{ 'green' if session.idor == 'Complete' else 'black' }}">IDOR: {{session.idor}}</p>
+    <p style="color: {{ 'green' if session.path == 'Complete' else 'black' }}">Path traversal: {{session.path}}</p>
     <p style="color: {{ 'green' if cookieFlag == 'Complete' else 'black' }}">Client-side Access Restrictions: {{cookieFlag}}</p>
     </script>
   </body>
