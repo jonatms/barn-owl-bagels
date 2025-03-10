@@ -1,0 +1,23 @@
+<html>
+  <head>
+  </head>
+<style>
+    img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+</style>
+<img src="{{url_for('static', filename='owlheader2.png')}}" />
+  <body>
+    <h1>Flags</h1>
+    <form action="/submitflag" method="post">
+      <label for="flag">Enter Flag:</label>
+      <input type="text" id="flag" name="flag">
+      <input type="submit" value="Submit">
+    </form>
+      <p>IDOR: {{session.idor}}</p>
+    </script>
+  </body>
+
+</html>
