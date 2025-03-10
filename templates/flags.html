@@ -16,7 +16,8 @@
       <input type="text" id="flag" name="flag">
       <input type="submit" value="Submit">
     </form>
-      <p>IDOR: {{session.idor}}</p>
+    <p style="color: {{ 'green' if session.idor == 'Complete' else 'black' }}">IDOR: {{session.idor}}</p>
+    <p style="color: {{ 'green' if cookieFlag == 'Complete' else 'black' }}">Client-side Access Restrictions: {{cookieFlag}}</p>
     </script>
   </body>
 
