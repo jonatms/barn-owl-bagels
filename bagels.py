@@ -16,6 +16,7 @@ def before_request():
         session['username'] = "user"
         session['idor'] = "Incomplete"
         session['path'] = "Incomplete"
+        session['git'] = "Incomplete"
         if 'user_id' not in request.cookies:
             user_id = str(uuid.uuid4())
             response.set_cookie('user_id', user_id)
@@ -40,6 +41,10 @@ def idor():
 @app.route('/path', methods=['GET'])  
 def path():  
     return render_template('path.html')
+
+@app.route('/git', methods=['GET'])  
+def git():  
+    return render_template('git.html')
 
 @app.route('/imageContent', methods=['GET'])  
 def imageContent():  
@@ -127,6 +132,9 @@ def submit_flag():
         return "Flag is correct!"
     elif flag == 'the_path_less_traveled_leads_to_bagels':
         session['path'] = "Complete"
+        return "Flag is correct!"
+    elif flag == 'bagels_and_websites_are_full_of_holes':
+        session['git'] = "Complete"
         return "Flag is correct!"
     else:
         return "Flag is incorrect."

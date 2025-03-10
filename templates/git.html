@@ -1,0 +1,17 @@
+<html>
+  <head>
+  </head>
+<style>
+    img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+</style>
+<img src="{{url_for('static', filename='content/images/owlheader2.png')}}" />
+  <body>
+    <h1>Git your secrets</h1>
+    <a href="{{ url_for('static', filename='dev/dev.zip') }}">Download the zip file</a>
+  </body>
+  <!-- password for zip is 'bagel'-->
+</html>
