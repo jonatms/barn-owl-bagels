@@ -1,3 +1,59 @@
-<html>
-  <p>{{files}}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index of {{ directory }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Index of {{ directory }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Last Modified</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td><a href="{{ url_for('superSecretSpecialFileContent', fetchMeThe=file.name) }}">{{ file.name }}</a></td>
+                <td>{{ file.size }} bytes</td>
+                <td>{{ file.last_modified }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
 </html>

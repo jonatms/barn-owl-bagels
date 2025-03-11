@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <title>Gift Cards</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        text-align: center;
+      }
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto; /* Center the image */
+      }
+      .content {
+        margin: 0 auto;
+        padding-left: 20px; /* Move content slightly to the right */
+        max-width: 400px; /* Ensure the content is centered */
+        text-align: left; /* Align content to the left */
+      }
+      h1 {
+        color: #333;
+        margin-top: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      th, td {
+        padding: 10px;
+        text-align: center; /* Center align text */
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="{{ url_for('static', filename='content/images/owlheader2.png') }}" />
+    <div class="content">
+      <h1>Your Gift Cards</h1>
+      <table id="gift-cards-table">
+        <tr>
+          <th>ID</th>
+          <th>Amount</th>
+          <th>Expiry Date</th>
+          <th>Status</th>
+        </tr>
+      </table>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/gift-cards?isManaged=true')
+          .then(response => response.json())
+          .then(data => {
+            const table = document.getElementById('gift-cards-table');
+            data.forEach(card => {
+              const row = table.insertRow();
+              row.insertCell(0).textContent = card.id;
+              row.insertCell(1).textContent = card.amount;
+              row.insertCell(2).textContent = card.expiry_date;
+              row.insertCell(3).textContent = card.status;
+            });
+          })
+          .catch(error => console.error('Error fetching gift cards:', error));
+      });
+    </script>
+  </body>
+</html>

@@ -1,17 +1,35 @@
 <html>
-  <head>
-  </head>
-<style>
-    img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-    }
-</style>
-<img src="/imageContent?file=owlheader2.png" />
-  <body>
-    <h1>Find Your Path</h1>
-    <!-- After a path traversal bug was exploited, we added some checks to prevent it and doubled it for extra security. -->
-  </body>
-
+<head>
+    <title>Find Your Path</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto; /* Center the image */
+        }
+        h1 {
+            color: #333;
+            margin-top: 20px;
+            margin-left: 45px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="/imageContent?file=owlheader2.png">
+    </header>
+    <main>
+        <h1>Find Your Path</h1>
+        <!-- After a path traversal bug was exploited, we added some checks to prevent it and doubled it for extra security. -->
+    </main>
+</body>
 </html>
