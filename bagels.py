@@ -97,7 +97,7 @@ def imageContent():
     path = os.path.commonpath([os.path.abspath(path)])
     print(path)
     normalized_path = os.path.normcase(path)
-    if 'barn-owl-bagels' not in normalized_path.replace('\\', '/'):
+    if 'static' not in normalized_path.replace('\\', '/'):
         return "Invalid path", 400
     if os.path.isdir(path):
         try:
