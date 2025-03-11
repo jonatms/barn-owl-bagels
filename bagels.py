@@ -25,7 +25,7 @@ def before_request():
         session['username'] = "user"
         session['idor'] = "Incomplete"
         session['path'] = "Incomplete"
-        session['git'] = "Incomplete"
+        session['mauth'] = "Incomplete"
         session['giftcards'] = "Incomplete"
         if 'user_id' not in request.cookies:
             user_id = str(uuid.uuid4())
@@ -52,9 +52,9 @@ def idor():
 def path():  
     return render_template('path.html')
 
-@app.route('/git', methods=['GET'])  
+@app.route('/mauth', methods=['GET'])  
 def git():  
-    return render_template('git.html')
+    return render_template('mauth.html')
 
 @app.route('/gift-cards', methods=['GET'])
 def gift_cards():
@@ -172,6 +172,10 @@ def order(order_id):
     return order_details
 
 @app.route('/', methods=['GET'])  
+def home():
+    return render_template('index.html')
+
+@app.route('/flags', methods=['GET'])  
 def flags():  
     vSecureCookie = request.cookies.get('vSecureCookie')
     decoded_sc = base64.b64decode(vSecureCookie.encode("ascii")).decode("ascii")
@@ -191,7 +195,7 @@ def submit_flag():
         session['path'] = "Complete"
         response = {"message": "Flag is correct!", "path": "Complete"}
     elif flag == 'bagels_and_websites_are_full_of_holes':
-        session['git'] = "Complete"
+        session['mauth'] = "Complete"
         response = {"message": "Flag is correct!", "git": "Complete"}
     elif flag == 'i_<3_bagel_gift_cards!':
         session['giftcards'] = "Complete"

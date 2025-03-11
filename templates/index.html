@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <title>Irresistible Doughy Oven-baked Rings</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        text-align: center;
+      }
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto; /* Center the image */
+      }
+      .content {
+        margin: 0 auto;
+        padding-left: 250px; /* Move content slightly to the right */
+        max-width: 800px; /* Ensure the content is centered */
+        text-align: left; /* Align content to the left */
+      }
+      h1 {
+        color: #333;
+        margin-top: 20px;
+      }
+      h2 {
+        color: #555;
+        margin-top: 10px;
+      }
+      p {
+        font-size: 16px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="{{ url_for('static', filename='content/images/owlheader2.png') }}" />
+    <div class="content">
+      <h1>Welcome to Barn Owl Bagels</h1>
+      <p>View your <a href="http://localhost:8000/idor">order</a></p>
+      <p>Have a <a href="http://localhost:8000/gift-cards">gift card?</a></p>
+      <p>New page under <a href="http://localhost:8000/mauth">construction</a></p>
+      <p>Submit your <a href="http://localhost:8000/flags">flags</a></p>
+    </div>
+  </body>
+
+</html>

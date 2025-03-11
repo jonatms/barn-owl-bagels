@@ -73,9 +73,9 @@
         <input type="submit" value="Submit">
       </form>
       <p id="idor" style="color: {{ 'green' if session.idor == 'Complete' else 'black' }}">IDOR: {{ session.idor }}</p>
-      <p id="path" style="color: {{ 'green' if session.path == 'Complete' else 'black' }}">Path traversal: {{ session.path }}</p>
+      <p id="path" style="color: {{ 'green' if session.path == 'Complete' else 'black' }}">Path Traversal: {{ session.path }}</p>
       <p id="cookieFlag" style="color: {{ 'green' if cookieFlag == 'Complete' else 'black' }}">Client-side Access Restrictions: {{ cookieFlag }}</p>
-      <p id="git" style="color: {{ 'green' if session.git == 'Complete' else 'black' }}">Git: {{ session.git }}</p>
+      <p id="mauth" style="color: {{ 'green' if session.mauth == 'Complete' else 'black' }}">Missing Auth/Git: {{ session.mauth }}</p>
       <p id="giftcards" style="color: {{ 'green' if session.giftcards == 'Complete' else 'black' }}">Gift Cards: {{ session.giftcards }}</p>
     </div>
     <script>
@@ -104,9 +104,9 @@
             document.getElementById('cookieFlag').textContent = `Client-side Access Restrictions: ${data.cookieFlag}`;
             document.getElementById('cookieFlag').style.color = 'green';
           }
-          if (data.git) {
-            document.getElementById('git').textContent = `Git: ${data.git}`;
-            document.getElementById('git').style.color = 'green';
+          if (data.mauth) {
+            document.getElementById('mauth').textContent = `mauth: ${data.mauth}`;
+            document.getElementById('mauth').style.color = 'green';
           }
           if (data.giftcards) {
             document.getElementById('giftcards').textContent = `Gift Cards: ${data.giftcards}`;
