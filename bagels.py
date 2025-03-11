@@ -92,7 +92,7 @@ def imageContent():
         for p in path_traversal_payloads:
             file_input = file_input.replace(p, '')
 
-    path = os.path.normpath(os.path.join('static/content/images/', file_input))
+    path = 'static/content/images/' + file_input
     print(path)
     path = os.path.commonpath([os.path.abspath(path)])
     print(path)
