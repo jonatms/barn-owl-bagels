@@ -27,5 +27,3 @@ docker build -t barn-owl-bagels .
     ```
 
 2. The Flask application should now be running and accessible at `http://localhost:8000`.
-
-## Project Structure
