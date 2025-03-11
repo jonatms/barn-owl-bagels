@@ -1,14 +1,23 @@
-from flask import Flask, render_template, request, make_response, session
+from flask import Flask, render_template, request, jsonify, make_response, session, send_file
 import uuid
 import base64
+import random
 import os
-  
+from datetime import datetime
+
 app = Flask(__name__)
 # This is the key for the session token, so that the session values can't be changed without this key
 app.config['SECRET_KEY'] = 'Lx1jEPHy2wXtmdUko2KywbiIMCKfttu8'
 
 bind_port = 8000
-  
+
+# Generate static gift cards on server load
+amounts = [10, 25, 50, 75, 100]
+all_gift_cards = [
+    {"id": i, "amount": f"${random.choice(amounts)}", "expiry_date": f"2025-{random.randint(1, 12):02d}-{random.randint(1, 28):02d}", "status": random.choice(["Active", "Redeemed"])}
+    for i in range(1, 101)
+]
+
 @app.before_request
 def before_request():
     if not 'username' in session:
@@ -17,6 +26,7 @@ def before_request():
         session['idor'] = "Incomplete"
         session['path'] = "Incomplete"
         session['git'] = "Incomplete"
+        session['giftcards'] = "Incomplete"
         if 'user_id' not in request.cookies:
             user_id = str(uuid.uuid4())
             response.set_cookie('user_id', user_id)
@@ -46,6 +56,33 @@ def path():
 def git():  
     return render_template('git.html')
 
+@app.route('/gift-cards', methods=['GET'])
+def gift_cards():
+    return render_template('gift-cards.html')
+
+@app.route('/api/gift-cards', methods=['GET'])
+def api_gift_cards():
+    is_managed = request.args.get('isManaged', 'false').lower() == 'true'
+
+    # Ensure the first two gift cards have status "Redeemed"
+    all_gift_cards[0]['status'] = "Redeemed"
+    all_gift_cards[1]['status'] = "Redeemed"
+
+    # Add a special flag for the gift card with id 58
+    for card in all_gift_cards:
+        if card['id'] == 58:
+            card['id'] = "i_<3_bagel_gift_cards!"
+            card['amount'] = "$100,000"
+            card['expiry_date'] = "Never"
+            card['status'] = "Active"
+    
+    if is_managed:
+        gift_cards = [card for card in all_gift_cards if card['id'] in [1, 2]]
+    else:
+        gift_cards = [card for card in all_gift_cards if card['id'] not in [1, 2]]
+    
+    return jsonify(gift_cards)
+
 @app.route('/imageContent', methods=['GET'])  
 def imageContent():  
     file_input = request.args.get('file')
@@ -55,17 +92,25 @@ def imageContent():
         for p in path_traversal_payloads:
             file_input = file_input.replace(p, '')
 
-    path = 'static/content/images/' + file_input
+    path = os.path.normpath(os.path.join('static/content/images/', file_input))
     print(path)
     path = os.path.commonpath([os.path.abspath(path)])
     print(path)
-    if 'Barn Owl Bagels\\static' not in path:
+    normalized_path = os.path.normcase(path)
+    if 'barn-owl-bagels' not in normalized_path.replace('\\', '/'):
         return "Invalid path", 400
     if os.path.isdir(path):
         try:
             files = os.listdir(path)
-            print(files)
-            return render_template('directory.html', files=files, directory=path)
+            file_info = []
+            for file in files:
+                file_path = os.path.join(path, file)
+                file_info.append({
+                    'name': file,
+                    'size': os.path.getsize(file_path),
+                    'last_modified': datetime.fromtimestamp(os.path.getmtime(file_path)).strftime('%d/%m/%Y')
+                })
+            return render_template('directory.html', files=file_info, directory=path)
         except Exception as e:
             return str(e), 500
     elif path:
@@ -80,6 +125,17 @@ def imageContent():
         except Exception as e:
             return str(e), 500
     return "No file specified", 400
+
+@app.route('/superSecretSpecialFileContent', methods=['GET'])
+def superSecretSpecialFileContent():
+    file_name = request.args.get('fetchMeThe')
+    file_path = os.path.normpath(os.path.join('static/flags/', file_name))
+    try:
+        return send_file(file_path)
+    except FileNotFoundError:
+        return "File not found", 404
+    except Exception as e:
+        return str(e), 500
 
 @app.route('/specialadminendpoint', methods=['GET'])  
 def special():  
@@ -115,7 +171,7 @@ def order(order_id):
         }
     return order_details
 
-@app.route('/flags', methods=['GET'])  
+@app.route('/', methods=['GET'])  
 def flags():  
     vSecureCookie = request.cookies.get('vSecureCookie')
     decoded_sc = base64.b64decode(vSecureCookie.encode("ascii")).decode("ascii")
@@ -127,17 +183,20 @@ def flags():
 @app.route('/submitflag', methods=['POST'])
 def submit_flag():
     flag = request.form.get('flag')
+    response = {"message": "Flag is incorrect."}
     if flag == "1NS3CUr3_D1r3CT_BAG3L_r3F3r3C3":
         session['idor'] = "Complete"
-        return "Flag is correct!"
+        response = {"message": "Flag is correct!", "idor": "Complete"}
     elif flag == 'the_path_less_traveled_leads_to_bagels':
         session['path'] = "Complete"
-        return "Flag is correct!"
+        response = {"message": "Flag is correct!", "path": "Complete"}
     elif flag == 'bagels_and_websites_are_full_of_holes':
         session['git'] = "Complete"
-        return "Flag is correct!"
-    else:
-        return "Flag is incorrect."
+        response = {"message": "Flag is correct!", "git": "Complete"}
+    elif flag == 'i_<3_bagel_gift_cards!':
+        session['giftcards'] = "Complete"
+        response = {"message": "Flag is correct!", "giftcards": "Complete"}
+    return jsonify(response)
 
 if __name__ == '__main__':  
     app.run(debug=False, host='0.0.0.0', port=bind_port)

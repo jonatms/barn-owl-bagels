@@ -1,17 +1,57 @@
-<html>
-  <head>
-  </head>
-<style>
-    img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-    }
-</style>
-<img src="{{url_for('static', filename='content/images/owlheader2.png')}}" />
-  <body>
-    <h1>Git your secrets</h1>
-    <a href="{{ url_for('static', filename='dev/dev.zip') }}">Download the zip file</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Your Secrets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto; /* Center the image */
+        }
+        .content {
+            margin: 0 auto;
+            padding-left: 20px; /* Move content slightly to the right */
+            max-width: 400px; /* Ensure the content is centered */
+            text-align: left; /* Align content to the left */
+        }
+        h1 {
+            color: #333;
+            margin-top: 20px;
+        }
+        a {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        a:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='content/images/owlheader2.png') }}" alt="Owl Header">
+    </header>
+    <main class="content">
+        <h1>Git your secrets</h1>
+        <a href="{{ url_for('static', filename='dev/dev.zip') }}">Download the zip file</a>
+    </main>
   </body>
-  <!-- password for zip is 'bagel'-->
+<!-- password for zip is 'bagel'-->
 </html>

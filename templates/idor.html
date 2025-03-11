@@ -1,30 +1,59 @@
 <html>
   <head>
-  </head>
-<style>
-    img {
+    <title>Irresistible Doughy Oven-baked Rings</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        text-align: center;
+      }
+      img {
         width: 100%;
         height: auto;
         object-fit: cover;
-    }
-</style>
-<img src="{{url_for('static', filename='content/images/owlheader2.png')}}" />
+        display: block;
+        margin: 0 auto; /* Center the image */
+      }
+      .content {
+        margin: 0 auto;
+        padding-left: 250px; /* Move content slightly to the right */
+        max-width: 800px; /* Ensure the content is centered */
+        text-align: left; /* Align content to the left */
+      }
+      h1 {
+        color: #333;
+        margin-top: 20px;
+      }
+      h2 {
+        color: #555;
+        margin-top: 10px;
+      }
+      p {
+        font-size: 16px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
   <body>
-    <h1>Irresistible Doughy Oven-baked Rings</h1>
-    <h2>Your Order</h2>
+    <img src="{{ url_for('static', filename='content/images/owlheader2.png') }}" />
+    <div class="content">
+      <h1>Irresistible Doughy Oven-baked Rings</h1>
+      <h2>Your Order</h2>
+      <div id="order-details"></div>
+    </div>
     <script>
-        fetch('/orderdetails/215')
-        .then(response => response.text())
+      fetch('/orderdetails/215')
+        .then(response => response.json())
         .then(data => {
-            const orderDetails = document.createElement('div');
-            const parsedData = JSON.parse(data);
-            orderDetails.innerHTML = `
-            <p>Item: ${parsedData.item}</p>
-            <p>Quantity: ${parsedData.quantity}</p>
-            <p>Price: $${parsedData.price}</p>
-            <p>Special Instructions: ${parsedData.special_instructions}</p>
-            `;
-            document.body.appendChild(orderDetails);
+          const orderDetails = document.getElementById('order-details');
+          orderDetails.innerHTML = `
+            <p>Item: ${data.item}</p>
+            <p>Quantity: ${data.quantity}</p>
+            <p>Price: $${data.price}</p>
+            <p>Special Instructions: ${data.special_instructions}</p>
+          `;
         })
         .catch(error => console.error('Error fetching order details:', error));
     </script>
