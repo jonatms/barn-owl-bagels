@@ -140,4 +140,4 @@ def submit_flag():
         return "Flag is incorrect."
 
 if __name__ == '__main__':  
-    app.run(debug=False, port=bind_port)
+    app.run(debug=False, host='0.0.0.0', port=bind_port)
